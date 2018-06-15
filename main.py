@@ -37,7 +37,6 @@ def addHost(master):
         v = value.get().strip()
         if v != "":
             hosts.append(v)
-        print hosts
         window.destroy()
         master.destroy()
         main()
