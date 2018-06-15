@@ -2,11 +2,11 @@ import subprocess
 import threading
 from utils import *
 import socket
-
 try:
     import xmlrpclib
 except ImportError:
-    import xmlrpc as xmlrpclib
+    # To run on centOS
+    import xmlrpc.client as xmlrpclib
 try:
     from Tkinter import *
 except ImportError:
