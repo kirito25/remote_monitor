@@ -16,7 +16,7 @@ socket.setdefaulttimeout(1.0)
 
 class Node:
 
-    def __init__(self, host):
+    def __init__(self, host, port=61209):
         """
         Takes an ip or FQDN to be able to access host
         through ssh and run a command.
@@ -25,7 +25,7 @@ class Node:
         self.threads = []
         self.connection = None
         self.alive = False
-        self.connection = xmlrpclib.ServerProxy('http://' + self.host + ":61209")
+        self.connection = xmlrpclib.ServerProxy('http://' + self.host + ":" + str(port))
         self._connect()
 
     def connect(self):
@@ -131,7 +131,7 @@ class NodeEntry(Frame):
         Frame.__init__(self, master)
         self.grid(pady=5)
 
-        label = Label(self, text=(host + ":"))
+        label = Label(self, text="{:>20}".format(host) + ":")
         label.pack(side=LEFT)
 
         self.node = Node(host)
