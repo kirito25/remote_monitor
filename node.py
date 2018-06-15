@@ -1,15 +1,18 @@
 import subprocess
 import threading
-import xmlrpclib
 from utils import *
 import socket
+
+try:
+    import xmlrpclib
+except ImportError:
+    import xmlrpc as xmlrpclib
 try:
     from Tkinter import *
 except ImportError:
     from tkinter import *
 
 socket.setdefaulttimeout(1.0)
-
 
 class Node:
 
