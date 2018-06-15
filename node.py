@@ -6,7 +6,7 @@ import socket
 try:
     from Tkinter import *
 except ImportError:
-    from tkinter import *x
+    from tkinter import *
 
 socket.setdefaulttimeout(1.0)
 
