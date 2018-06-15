@@ -1,9 +1,13 @@
 import subprocess
 import threading
-from Tkinter import *
 import xmlrpclib
 from utils import *
 import socket
+try:
+    from Tkinter import *
+except ImportError:
+    from tkinter import *x
+
 socket.setdefaulttimeout(1.0)
 
 

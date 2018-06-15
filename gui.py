@@ -2,9 +2,8 @@ from node import *
 
 mainwindow = Tk(className=" Remote Monitor Selection")
 
-NodeEntry(mainwindow,  host="pclab23.cs.umb.edu")
-NodeEntry(mainwindow, host="pclab25.cs.umb.edu")
-NodeEntry(mainwindow, host="pclab24.cs.umb.edu")
+NodeEntry(mainwindow,  host="127.0.0.1")
+NodeEntry(mainwindow,  host="10.0.0.12")
 
 
 mainwindow.minsize(width=350, height=250)
