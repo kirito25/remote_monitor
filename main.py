@@ -43,6 +43,7 @@ def addHost(master):
     entry.focus()
     window.mainloop()
 
+
 def main():
     mainwindow = Tk(className=" Remote Monitor Selection")
     Button(mainwindow, text="Add Host", command=lambda: addHost(mainwindow)).grid(pady=10)
