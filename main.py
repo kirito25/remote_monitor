@@ -46,11 +46,11 @@ def addHost(master):
 
 def main():
     mainwindow = Tk(className=" Remote Monitor Selection")
+    # Button to add an entry to the running window
     Button(mainwindow, text="Add Host", command=lambda: addHost(mainwindow)).grid(pady=10)
     if len(hosts) > 0:
         for i in hosts:
             NodeEntry(mainwindow, host=str(i))
-    # Button to add an entry to the running window
     mainwindow.minsize(width=350, height=250)
     mainwindow.mainloop()
 
