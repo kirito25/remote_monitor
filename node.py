@@ -15,6 +15,7 @@ except ImportError:
 
 socket.setdefaulttimeout(1.0)
 
+
 class Node:
 
     def __init__(self, host, port=61209):
@@ -53,6 +54,7 @@ class Node:
     def run(self, command="uname -a", t=True):
         """
         :param command: The remote command to run through ssh
+        :param t: wether the ssh connection has the -t flag
         :return: None
         """
         thread = threading.Thread(target=self._run, args=(command, t))

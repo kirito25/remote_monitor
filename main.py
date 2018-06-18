@@ -21,7 +21,8 @@ except IOError:
     Label(window, text="Host file not found, looked in " + hostfile).pack()
     window.mainloop()
 
-def addHost(master):
+
+def add_host(master):
     """
     Create a windows to add a host and add it to the selection list.
     :param master: a tk object
@@ -49,7 +50,7 @@ def addHost(master):
 def main():
     mainwindow = Tk(className=" Remote Monitor Selection")
     # Button to add an entry to the running window
-    Button(mainwindow, text="Add Host", command=lambda: addHost(mainwindow)).grid(pady=10)
+    Button(mainwindow, text="Add Host", command=lambda: add_host(mainwindow)).grid(pady=10)
     if len(hosts) > 0:
         for i in hosts:
             NodeEntry(mainwindow, host=str(i))
