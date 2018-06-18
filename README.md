@@ -19,7 +19,7 @@ and the time delay between them.
 $ python main.py
 ```
 
-# Dependencies (compatible with both python3 and python2.7)
+# Dependencies (works on python3 and python2.7)
 - socket
 - tkinter
 - xmlrpc or xmlrpclib
