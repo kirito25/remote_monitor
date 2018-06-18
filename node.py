@@ -1,5 +1,6 @@
 import subprocess
 import threading
+import os
 from utils import *
 import socket
 try:
@@ -25,6 +26,7 @@ class Node:
         self.threads = []
         self.connection = None
         self.alive = False
+        # self._ping = True if os.system("ping -c 1 -W 1 " + self.host) is 0 else False
         self.connection = xmlrpclib.ServerProxy('http://' + self.host + ":" + str(port))
         self._connect()
 
@@ -34,7 +36,7 @@ class Node:
         :return:
         """
         # TODO find way to run glances in server mode from the client
-        #self.run("/home/cristian/bin/run_glances", t=False)
+        # self._run("/home/cristian/bin/run_glances", t=False)
         self._connect()
 
     def _connect(self):
@@ -71,20 +73,25 @@ class Node:
 
         ssh.wait()
 
-    def usedRAM(self):
+    def used_ram(self):
         """
         :return: string of the RAM used
         """
-        default = "        N/A"
         if not self.alive:
-           return default
+            return None
         try:
             socket.setdefaulttimeout(1.0)
-            return humanReadable(eval(self.connection.getMem())['used'])
+            return eval(self.connection.getMem())['used']
         except:
-            return default
+            return None
 
-    def getLoad(self):
+    def used_ram_str(self):
+        s = self.used_ram()
+        if s is None:
+            return "        N/A"
+        return humanReadable(s)
+
+    def get_load(self):
         """
         :return: a dictionary, or 'N/A'
             ex {"min1": 0.05, "min5": 0.14, "min15": 0.22}
@@ -99,20 +106,16 @@ class Node:
         except:
             return None
 
-    def loadStr(self):
+    def load_str(self):
         """
         :return: a str of the load as shown on top or 'N/A'
         """
-        default = "                  N/A"
-        if not self.alive:
-            return default
-        try:
-            return "".join(["%3.2f, " % (i,) for i in self.getLoad().values()]).strip()[:-1]
-        except:
-            return default
+        s = self.get_load()
+        if s is None:
+            return "                  N/A"
+        return "".join(["%3.2f, " % (i,) for i in s.values()]).strip()[:-1]
 
-
-    def isAlive(self):
+    def refresh(self):
         """
         Indicator if there is an active connection
         :return: true is connection to node works
@@ -137,7 +140,7 @@ class NodeEntry(Frame):
         #self.connectButton = Button(self, text="Connect")
         #self.connectButton["command"] = lambda: self.node.connect()
         #self.connectButton.pack(side=LEFT)
-        #if self.node.isAlive():
+        #if self.node.alive:
         #    self.connectButton['state'] = DISABLED
 
         self.button = Button(self, text="Open System Monitor")
@@ -146,31 +149,27 @@ class NodeEntry(Frame):
 
         self.usedRAM = StringVar()
         self.load = StringVar()
-        self.setUsedRAM()
-        self.setLoad()
+        self.set_used_ram()
+        self.set_load()
 
         Label(self, textvariable=self.usedRAM).pack(side=LEFT)
         Label(self, textvariable=self.load).pack(side=LEFT)
 
-        self.remove = Button(self, text="Remove")
-        self.remove["command"] = lambda: self.my_destroy()
-        self.remove.pack(side=LEFT)
+        Button(self, text="Remove", command=self.my_destroy).pack(side=LEFT)
 
-        self.updateEntry()
+        self.update_entry()
 
-    def updateEntry(self):
-        self.node.isAlive()
-        # TODO once a remote method of running glance is found uncomment this
-        #self.connectButton['state'] = DISABLED if self.node.isAlive() else NORMAL
-        self.setLoad()
-        self.setUsedRAM()
-        self.after(3000, self.updateEntry)
+    def update_entry(self):
+        self.node.refresh()
+        self.set_load()
+        self.set_used_ram()
+        self.after(3000, self.update_entry)
 
-    def setUsedRAM(self):
-        self.usedRAM.set("RAM Usage: " + self.node.usedRAM())
+    def set_used_ram(self):
+        self.usedRAM.set("RAM Usage: " + self.node.used_ram_str())
 
-    def setLoad(self):
-        self.load.set("Load: " + self.node.loadStr())
+    def set_load(self):
+        self.load.set("Load: " + self.node.load_str())
 
     def my_destroy(self):
         """
