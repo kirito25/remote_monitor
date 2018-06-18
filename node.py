@@ -159,7 +159,7 @@ class NodeEntry(Frame):
         self.node.refresh()
         self.set_load()
         self.set_used_ram()
-        self.after(3000, self.update_entry)
+        self.after(4000, self.update_entry)
 
     def set_used_ram(self):
         self.usedRAM.set("RAM Usage: " + self.node.used_ram_str())

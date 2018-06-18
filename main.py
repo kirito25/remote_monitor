@@ -13,8 +13,9 @@ try:
     # load the hosts from the host file
     with open(hostfile) as f:
         for host in f:
-            if host.strip() != '':
-                hosts.append(host.strip())
+            host = host.strip()
+            if host != '' and host not in hosts:
+                hosts.append(host)
 except IOError:
     window = Tk(className=" Error")
     Label(window, text="Host file not found, looked in " + hostfile).pack()
@@ -34,7 +35,8 @@ def addHost(master):
 
     def callback():
         v = entry.get().strip()
-        if v != "":
+        if v != "" and v not in hosts:
+            hosts.append(v)
             NodeEntry(master, host=str(v))
         window.destroy()
 
