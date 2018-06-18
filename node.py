@@ -129,11 +129,8 @@ class NodeEntry(Frame):
     def __init__(self, master, *args, **kwargs):
         host = kwargs['host'].strip()
         Frame.__init__(self, master)
-        self.grid(pady=5)
-
-        label = Label(self, text="{:>20}".format(host) + ":")
-        label.pack(side=LEFT)
-
+        self.grid(pady=5, padx=5)
+        Label(self, text="{:>20}".format(host) + ":").pack(side=LEFT)
         self.node = Node(host)
 
         # TODO once a remote method of running glance is found uncomment this
@@ -154,6 +151,11 @@ class NodeEntry(Frame):
 
         Label(self, textvariable=self.usedRAM).pack(side=LEFT)
         Label(self, textvariable=self.load).pack(side=LEFT)
+
+        self.remove = Button(self, text="Remove")
+        self.remove["command"] = lambda: self.my_destroy()
+        self.remove.pack(side=LEFT)
+
         self.updateEntry()
 
     def updateEntry(self):
@@ -169,6 +171,14 @@ class NodeEntry(Frame):
 
     def setLoad(self):
         self.load.set("Load: " + self.node.loadStr())
+
+    def my_destroy(self):
+        """
+        Custom clean up method to remove this entry
+        :return: None
+        """
+        del self.node
+        self.destroy()
 
 
 
