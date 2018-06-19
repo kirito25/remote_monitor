@@ -17,9 +17,10 @@ try:
             if host != '' and host not in hosts:
                 hosts.append(host)
 except IOError:
-    window = Tk(className=" Error")
-    Label(window, text="Host file not found, looked in " + hostfile).pack()
-    window.mainloop()
+    root = Tk()
+    root.withdraw()
+    messagebox.showwarning("Error", "Host file not found, looked in " + hostfile)
+    root.destroy()
 
 
 def add_host(master):
@@ -49,6 +50,7 @@ def add_host(master):
 
 def main():
     mainwindow = Tk(className=" Remote Monitor Selection")
+    mainwindow.focus()
     # Button to add an entry to the running window
     Button(mainwindow, text="Add Host", command=lambda: add_host(mainwindow)).grid(pady=10)
     if len(hosts) > 0:

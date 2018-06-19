@@ -9,9 +9,13 @@ except ImportError:
     # To run on centOS
     import xmlrpc.client as xmlrpclib
 try:
+    # python2
     from Tkinter import *
+    import tkMessageBox as messagebox
 except ImportError:
+    #python3
     from tkinter import *
+    from tkinter import messagebox
 
 socket.setdefaulttimeout(1.0)
 
