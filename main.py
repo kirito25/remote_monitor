@@ -56,7 +56,7 @@ def main():
     if len(hosts) > 0:
         for i in hosts:
             NodeEntry(mainwindow, host=str(i))
-    mainwindow.minsize(width=350, height=250)
+    mainwindow.minsize(width=340, height=50)
     mainwindow.mainloop()
 
 
