@@ -3,7 +3,6 @@ from os.path import expanduser
 import argparse
 
 
-
 def add_host(master):
     """
     Create a windows to add a host and add it to the selection list.

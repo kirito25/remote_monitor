@@ -10,7 +10,6 @@ except ImportError:
     from tkinter import messagebox
 
 
-
 class Node:
 
     def __init__(self, host, port=61209):
