@@ -1,5 +1,6 @@
 import subprocess
 import threading
+import thread
 try:
     # python2
     from Tkinter import *
@@ -19,6 +20,7 @@ class Node:
         """
         self.host = str(host)
         self.threads = []
+        self.stop_event = threading.Event()
 
     def run(self, command="uname -a", t=True):
         """
@@ -41,7 +43,15 @@ class Node:
                                    shell=False,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
-        ssh.wait()
+        self.stop_event.wait()
+        try:
+            ssh.terminate()
+        except OSError:
+            pass
+        thread.exit_thread()
+
+    def kill_threads(self):
+        self.stop_event.set()
 
     def __str__(self):
         return self.host
@@ -55,15 +65,14 @@ class NodeEntry(Frame):
         self.grid(pady=5, padx=5)
         Label(self, text="{:>20}".format(host) + ":").pack(side=LEFT)
         self.node = Node(host)
+        button = Button(self, text="Open System Monitor")
+        button["command"] = lambda: self.node.run("gnome-system-monitor")
+        button.pack(side=LEFT)
 
-        self.button = Button(self, text="Open System Monitor")
-        self.button["command"] = lambda: self.node.run("gnome-system-monitor")
-        self.button.pack(side=LEFT)
-
-    def my_destroy(self):
+    def destroy(self):
         """
         Custom clean up method to remove this entry
         :return: None
         """
-        del self.node
-        self.destroy()
+        self.node.kill_threads()
+        Frame.destroy(self)

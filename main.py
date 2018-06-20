@@ -55,7 +55,7 @@ def remove_host(master):
 
     def callback():
         v = value.get().strip()
-        node_entries[v].my_destroy()
+        node_entries[v].destroy()
         del node_entries[v]
         window.destroy()
 
