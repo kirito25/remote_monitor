@@ -51,7 +51,7 @@ def remove_host(master):
     options = OptionMenu(window, value, *(node_entries.keys()))
     options.config(width=20)
     options.pack(side=LEFT)
-    value.set(node_entries.keys()[0])
+    value.set(list(node_entries.keys())[0])
 
     def callback():
         v = value.get().strip()
