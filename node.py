@@ -69,7 +69,7 @@ class NodeEntry(Frame):
         Frame.__init__(self, master)
         self.grid(pady=5, padx=5)
         self.node = Node(host)
-        Label(self, text="{:>20}".format(self.node) + ":").pack(side=LEFT)
+        Label(self, text="{:>20}".format(str(self.node)) + ":").pack(side=LEFT)
         button = Button(self, text="Open System Monitor")
         button["command"] = lambda: self.node.run("gnome-system-monitor")
         button.pack(side=LEFT)
