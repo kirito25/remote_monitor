@@ -1,14 +1,15 @@
 import subprocess
 import threading
-import thread
 try:
     # python2
     from Tkinter import *
     import tkMessageBox as messagebox
+    import thread
 except ImportError:
     #python3
     from tkinter import *
     from tkinter import messagebox
+    import _thread as thread
 
 
 class Node:
