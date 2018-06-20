@@ -13,7 +13,7 @@ except ImportError:
 
 class Node:
 
-    def __init__(self, host, port=61209):
+    def __init__(self, host):
         """
         Takes an ip or FQDN to be able to access host
         through ssh and run a command.
