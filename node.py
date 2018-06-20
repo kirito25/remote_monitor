@@ -57,18 +57,9 @@ class NodeEntry(Frame):
         Label(self, text="{:>20}".format(host) + ":").pack(side=LEFT)
         self.node = Node(host)
 
-        # TODO once a remote method of running glance is found uncomment this
-        # self.connectButton = Button(self, text="Connect")
-        # self.connectButton["command"] = lambda: self.node.connect()
-        # self.connectButton.pack(side=LEFT)
-        # if self.node.alive:
-        #    self.connectButton['state'] = DISABLED
-
         self.button = Button(self, text="Open System Monitor")
         self.button["command"] = lambda: self.node.run("gnome-system-monitor")
         self.button.pack(side=LEFT)
-
-        Button(self, text="Remove", command=self.my_destroy).pack(side=LEFT)
 
     def my_destroy(self):
         """
