@@ -1,5 +1,6 @@
 import subprocess
 import threading
+import socket
 try:
     # python2
     from Tkinter import *
@@ -55,7 +56,10 @@ class Node:
         self.stop_event.set()
 
     def __str__(self):
-        return self.host
+        try:
+            return socket.gethostbyaddr(self.host)[0]
+        except socket.herror:
+            return self.host + " does not exist"
 
 
 class NodeEntry(Frame):
