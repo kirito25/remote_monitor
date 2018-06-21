@@ -18,5 +18,5 @@ def exist(host):
     """
     try:
         return socket.gethostbyaddr(host)[0]
-    except socket.herror:
+    except:
         return False
