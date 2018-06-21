@@ -71,6 +71,8 @@ class NodeEntry(Frame):
         Label(self, text="{:>20}".format(str(self.node)) + ":").pack(side=LEFT)
         button = Button(self, text="Open System Monitor")
         button["command"] = lambda: self.node.run("gnome-system-monitor")
+        if not exist(self.node.host):
+            button['state'] = DISABLED
         button.pack(side=LEFT)
 
     def destroy(self):
