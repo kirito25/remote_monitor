@@ -68,8 +68,7 @@ class NodeEntry(Frame):
         Frame.__init__(self, master)
         self.grid(pady=5, padx=5)
         self.node = Node(host)
-        Label(self, text="{:>20}".format(str(self.node)) + ":").pack(side=LEFT)
-        button = Button(self, text="Open System Monitor")
+        button = Button(self, text=str(self.node))
         button["command"] = lambda: self.node.run("gnome-system-monitor")
         if not exist(self.node.host):
             button['state'] = DISABLED
