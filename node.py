@@ -1,59 +1,28 @@
 import subprocess
 import threading
-import os
 from utils import *
-import socket
-try:
-    import xmlrpclib
-except ImportError:
-    # To run on centOS
-    import xmlrpc.client as xmlrpclib
 try:
     # python2
     from Tkinter import *
     import tkMessageBox as messagebox
+    import thread
 except ImportError:
     #python3
     from tkinter import *
     from tkinter import messagebox
-
-socket.setdefaulttimeout(1.0)
+    import _thread as thread
 
 
 class Node:
 
-    def __init__(self, host, port=61209):
+    def __init__(self, host):
         """
         Takes an ip or FQDN to be able to access host
         through ssh and run a command.
         """
         self.host = str(host)
         self.threads = []
-        self.connection = None
-        self.alive = False
-        # self._ping = True if os.system("ping -c 1 -W 1 " + self.host) is 0 else False
-        self.connection = xmlrpclib.ServerProxy('http://' + self.host + ":" + str(port))
-        self._connect()
-
-    def connect(self):
-        """
-        Method to run glances -s on node, not implemented yet
-        :return:
-        """
-        # TODO find way to run glances in server mode from the client
-        # self._run("/home/cristian/bin/run_glances", t=False)
-        self._connect()
-
-    def _connect(self):
-        """
-        Preform a xmlrpc server check and update node alive status
-        :return: None
-        """
-        try:
-            self.connection.getNow()
-            self.alive = True
-        except:
-            self.alive = False
+        self.stop_event = threading.Event()
 
     def run(self, command="uname -a", t=True):
         """
@@ -76,58 +45,20 @@ class Node:
                                    shell=False,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
-        ssh.wait()
-
-    def used_ram(self):
-        if not self.alive:
-            return None
+        self.stop_event.wait()
         try:
-            return eval(self.connection.getMem())['used']
-        except:
-            return None
+            ssh.terminate()
+        except OSError:
+            pass
+        thread.exit_thread()
 
-    def used_ram_str(self):
-        """
-        :return: string of the RAM used
-        """
-        s = self.used_ram()
-        if s is None:
-            return "        N/A"
-        return humanReadable(s)
-
-    def get_load(self):
-        """
-        :return: a dictionary, or None
-            ex {"min1": 0.05, "min5": 0.14, "min15": 0.22}
-        """
-        if not self.alive:
-            return None
-        try:
-            loads = eval(self.connection.getLoad())
-            del loads['cpucore']
-            return loads
-        except:
-            return None
-
-    def load_str(self):
-        """
-        :return: a str of the load as shown on top or 'N/A'
-        """
-        s = self.get_load()
-        if s is None:
-            return "                  N/A"
-        return "".join(["%3.2f, " % (i,) for i in s.values()]).strip()[:-1]
-
-    def refresh(self):
-        """
-        Indicator if there is an active connection
-        :return: true is connection to node works
-        """
-        self._connect()
-        return self.alive
+    def kill_threads(self):
+        self.stop_event.set()
 
     def __str__(self):
-        return self.host
+        if exist(self.host):
+            return exist(self.host)
+        return self.host + " does not exist"
 
 
 class NodeEntry(Frame):
@@ -136,47 +67,16 @@ class NodeEntry(Frame):
         host = kwargs['host'].strip()
         Frame.__init__(self, master)
         self.grid(pady=5, padx=5)
-        Label(self, text="{:>20}".format(host) + ":").pack(side=LEFT)
         self.node = Node(host)
+        Label(self, text="{:>20}".format(str(self.node)) + ":").pack(side=LEFT)
+        button = Button(self, text="Open System Monitor")
+        button["command"] = lambda: self.node.run("gnome-system-monitor")
+        button.pack(side=LEFT)
 
-        # TODO once a remote method of running glance is found uncomment this
-        # self.connectButton = Button(self, text="Connect")
-        # self.connectButton["command"] = lambda: self.node.connect()
-        # self.connectButton.pack(side=LEFT)
-        # if self.node.alive:
-        #    self.connectButton['state'] = DISABLED
-
-        self.button = Button(self, text="Open System Monitor")
-        self.button["command"] = lambda: self.node.run("gnome-system-monitor")
-        self.button.pack(side=LEFT)
-
-        self.usedRAM = StringVar()
-        self.load = StringVar()
-        self.set_used_ram()
-        self.set_load()
-
-        Label(self, textvariable=self.usedRAM).pack(side=LEFT)
-        Label(self, textvariable=self.load).pack(side=LEFT)
-
-        Button(self, text="Remove", command=self.my_destroy).pack(side=LEFT)
-        self.update_entry()
-
-    def update_entry(self):
-        self.node.refresh()
-        self.set_load()
-        self.set_used_ram()
-        self.after(4000, self.update_entry)
-
-    def set_used_ram(self):
-        self.usedRAM.set("RAM Usage: " + self.node.used_ram_str())
-
-    def set_load(self):
-        self.load.set("Load: " + self.node.load_str())
-
-    def my_destroy(self):
+    def destroy(self):
         """
         Custom clean up method to remove this entry
         :return: None
         """
-        del self.node
-        self.destroy()
+        self.node.kill_threads()
+        Frame.destroy(self)

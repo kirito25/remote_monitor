@@ -9,10 +9,6 @@ $ ssh <host> date
 ```
 response seamlessly and quietly.
 
-The program also has the capability of showing other stats if the remote host is running a glance server 
-and are reachable.
-The showing of this additional stats are minimal and require improvement such as how much data is being requested
-and the time delay between them.
 
 # Running
 ```
@@ -20,13 +16,8 @@ $ python main.py
 ```
 
 # Dependencies (works on python3 and python2.7)
-- socket
 - tkinter
-- xmlrpc or xmlrpclib
 - threading
 - subprocess
 - argparse
 
-# Optional Dependencies
-Have glance2.x or higher running on the remote host in server mode
-refer to <a href="https://github.com/nicolargo/glances">Glance Github</a>
