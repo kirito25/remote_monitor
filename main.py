@@ -100,6 +100,7 @@ def main():
     mainwindow.bind("a", a_key)
     mainwindow.bind("R", r_key)
     mainwindow.bind("r", r_key)
+    mainwindow.minsize(200,100)
     mainwindow.mainloop()
 
 
