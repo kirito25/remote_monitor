@@ -15,6 +15,13 @@ response seamlessly and quietly.
 $ python main.py
 ```
 
+# Create executable
+```
+$ pyinstaller --onefile main.py
+```
+
+The executable will be in the 'dist' directory created
+
 # Dependencies (works on python3 and python2.7)
 - tkinter
 - threading
