@@ -20,7 +20,8 @@ def add_host(master):
         v = entry.get().strip()
         if v != "" and v not in node_entries.keys():
             node =  NodeEntry(master, host=v)
-            node_entries[str(node)] = node
+            key = "%s" % str(node)
+            node_entries[key] = node
         window.destroy()
 
     def enter_key(event):
@@ -78,7 +79,8 @@ def main():
                 host = host.strip()
                 if host != '' and host not in node_entries.keys():
                     node =  NodeEntry(mainwindow, host=host)
-                    node_entries[str(node)] = node
+                    key = "%s" % str(node)
+                    node_entries[key] = node
     except IOError:
         root = Tk()
         root.withdraw()

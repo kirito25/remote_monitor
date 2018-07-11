@@ -81,3 +81,6 @@ class NodeEntry(Frame):
         """
         self.node.kill_threads()
         Frame.destroy(self)
+
+    def __str__(self):
+        return str(self.node)
