@@ -58,7 +58,7 @@ class Node:
     def __str__(self):
         if exist(self.host):
             return exist(self.host)
-        return self.host + " does not exist"
+        return self.host
 
 
 class NodeEntry(Frame):
