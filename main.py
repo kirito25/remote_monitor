@@ -89,6 +89,8 @@ def main():
     def r_key(event):
         remove_host(mainwindow)
 
+
+    Frame(mainwindow).pack()
     mainwindow.focus()
     menu = Menu(mainwindow)
     mainwindow.config(menu=menu)
@@ -100,7 +102,6 @@ def main():
     mainwindow.bind("a", a_key)
     mainwindow.bind("R", r_key)
     mainwindow.bind("r", r_key)
-    mainwindow.minsize(200,100)
     mainwindow.mainloop()
 
 

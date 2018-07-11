@@ -66,13 +66,13 @@ class NodeEntry(Frame):
     def __init__(self, master, *args, **kwargs):
         host = kwargs['host'].strip()
         Frame.__init__(self, master)
-        self.grid(padx=5, pady=5)
+        self.pack()
         self.node = Node(host)
         button = Button(self, text=self.node.host)
         button["command"] = lambda: self.node.run("gnome-system-monitor")
         if not exist(self.node.host):
             button['state'] = DISABLED
-        button.pack(side=LEFT, fill=BOTH)
+        button.pack()
 
     def destroy(self):
         """
